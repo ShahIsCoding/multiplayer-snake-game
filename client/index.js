@@ -2,7 +2,13 @@ const BG_COLOR = "#231f20";
 const SNAKE_COLOR = "#c2c2c2";
 const FOOD_COLOR = "#e66916";
 
+
+const socket = io('http://localhost:3000');
+socket.on('init',handleInit);
+socket.on('gamestate',handleGameState);
 const gameScreen = document.getElementById("gameScreen");
+
+
 let canvas, ctx;
 let gameState = {
   player: {
@@ -67,4 +73,11 @@ function paintPlayer(playerState, size, color) {
     ctx.fillRect(cell.x * size, cell.y * size, size, size);
   }
 }
-paintGame(gameState);
+
+function handleInit(message){
+    console.log(message);
+}
+function handleGameState(gameState){
+  gameState = JSON.parse(gameState);
+  requestAnimationFrame(()=>paintGame(gameState));
+}
